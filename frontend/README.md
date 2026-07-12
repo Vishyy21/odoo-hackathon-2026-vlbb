@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎨 TransitOps Frontend
+# 🎨 TransitOps Frontend - Vishesh Nigam
 
 ### Modern Fleet Management Dashboard
 
