@@ -202,11 +202,7 @@ Each feature is developed independently and merged into `main` after testing and
 
 Watch Below -
 
-
-
 https://github.com/user-attachments/assets/098e4f0c-57c6-427f-96c7-8a0760aaf5b6
-
-
 
 ---
 
@@ -225,7 +221,6 @@ Create commits regularly and merge into `main` after review.
 # 📄 License
 
 This project was developed for the **Odoo Hackathon 2026**.
-
 ---
 
 <div align="center">
