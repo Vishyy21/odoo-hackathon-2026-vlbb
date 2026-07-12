@@ -19,6 +19,18 @@ Transforming fleet operations with intelligent trip planning, vehicle management
 </div>
 
 ---
+Demo Video 
+
+
+
+https://github.com/user-attachments/assets/098e4f0c-57c6-427f-96c7-8a0760aaf5b6
+
+
+
+
+
+
+
 
 # 📖 Overview
 
