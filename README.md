@@ -131,6 +131,36 @@ The system provides insights including:
 
 ---
 
+---
+
+# 🚀 How to Run Locally
+
+### 1. Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+# Start the backend server on port 5000
+npm start
+```
+
+### 3. Frontend Setup
+```bash
+cd frontend
+npm install
+# Start the Vite development server
+npm run dev
+```
+
+### 4. Database Setup
+The SQLite database is pre-configured and automatically seeded with dummy data for the hackathon. Ensure `database/transitops.db` exists.
+Default Admin login: `admin@transitops.com` / `admin123`
+
+---
+
 # 👨‍💻 Team
 
 | Member | 
