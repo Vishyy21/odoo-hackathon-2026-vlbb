@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-primary: #714B67;
+    --color-primary-foreground: #FFFFFF;
+    --color-secondary: #875A7B;
+    --color-accent: #A87497;
+    --color-background: #F6F6F6;
+    --color-surface: #FFFFFF;
+    --color-border: #E5E7EB;
+    --color-text: #2D3748;
+    --color-muted: #6B7280;
+    --color-muted-background: #F3F4F6;
+    
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
+    --color-info: #3B82F6;
+
+    --radius: 10px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .dark {
+    --color-primary: #875A7B;
+    --color-primary-foreground: #FFFFFF;
+    --color-secondary: #A87497;
+    --color-accent: #D295C0;
+    --color-background: #121212;
+    --color-surface: #1E1E1E;
+    --color-border: #2D2D2D;
+    --color-text: #E5E7EB;
+    --color-muted: #9CA3AF;
+    --color-muted-background: #2A2A2A;
+  }
+}
+
+@theme {
+  --color-odoo-primary: var(--color-primary);
+  --color-odoo-primary-foreground: var(--color-primary-foreground);
+  --color-odoo-secondary: var(--color-secondary);
+  --color-odoo-accent: var(--color-accent);
+  --color-odoo-background: var(--color-background);
+  --color-odoo-surface: var(--color-surface);
+  --color-odoo-border: var(--color-border);
+  --color-odoo-text: var(--color-text);
+  --color-odoo-muted: var(--color-muted);
+  --color-odoo-muted-background: var(--color-muted-background);
+  --color-odoo-success: var(--color-success);
+  --color-odoo-warning: var(--color-warning);
+  --color-odoo-danger: var(--color-danger);
+  --color-odoo-info: var(--color-info);
+
+  --font-sans: "Inter", sans-serif;
+  
+  --shadow-enterprise: var(--shadow-sm);
+  --shadow-enterprise-md: var(--shadow-md);
+  
+  --radius-enterprise: var(--radius);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
