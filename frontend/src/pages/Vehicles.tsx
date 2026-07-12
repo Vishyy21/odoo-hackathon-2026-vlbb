@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { VehicleService } from '../services/vehicle.service';
 import type { Vehicle } from '../types';
 import { toast } from 'sonner';
+import { exportToCSV } from '../utils/csv';
 import { DataTable } from '../components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
@@ -27,7 +28,8 @@ export const Vehicles = () => {
   }, []);
 
   const handleExport = () => {
-    toast.info('Downloading CSV export...');
+    exportToCSV(vehicles, 'vehicles_export');
+    toast.success('Downloaded CSV export!');
   };
 
   const handleAddVehicle = () => {

@@ -1,7 +1,7 @@
 import { apiClient } from '../api/api';
 import { MOCK_NOTIFICATIONS } from '../mocks/notification.mock';
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export const NotificationService = {
   getNotifications: async () => {

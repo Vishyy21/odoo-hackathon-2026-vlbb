@@ -5,7 +5,7 @@ export const AuthService = {
     return apiClient.post('/auth/login', credentials);
   },
   logout: async () => {
-    return apiClient.post('/auth/logout');
+    return Promise.resolve();
   },
   getCurrentUser: async () => {
     return apiClient.get('/auth/me');

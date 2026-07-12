@@ -21,7 +21,7 @@ export const Login = () => {
     try {
       const response = await AuthService.login({ email, password });
       // Depending on axios interceptor, response might directly be data
-      const token = response?.token || response?.data?.token;
+      const token = (response as any)?.token || (response as any)?.data?.token;
       if (token) {
         localStorage.setItem('auth_token', token);
         navigate('/');

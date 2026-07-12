@@ -8,6 +8,9 @@ import { motion } from 'framer-motion';
 import { FuelService } from '../services/fuel.service';
 import type { FuelLog } from '../mocks/fuel.mock';
 import { toast } from 'sonner';
+import { Modal } from '../components/ui/modal';
+import { Input } from '../components/ui/input';
+import { exportToCSV } from '../utils/csv';
 import { DataTable } from '../components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
@@ -15,6 +18,31 @@ import type { ColumnDef } from '@tanstack/react-table';
 export const Fuel = () => {
   const [logs, setLogs] = useState<FuelLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleLogSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const form = e.target as HTMLFormElement;
+      const data = {
+        vehicleId: (form.elements.namedItem('vehicleId') as HTMLInputElement).value,
+        date: (form.elements.namedItem('date') as HTMLInputElement).value,
+        gallons: Number((form.elements.namedItem('gallons') as HTMLInputElement).value),
+        cost: Number((form.elements.namedItem('cost') as HTMLInputElement).value),
+      };
+      const result = await FuelService.logFuel(data);
+      setLogs([result, ...logs]);
+      toast.success('Fuel Log logged successfully');
+      setIsModalOpen(false);
+    } catch (err) {
+      toast.error('Failed to log fuel log');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   useEffect(() => {
     FuelService.getFuelLogs().then((data) => {
@@ -27,7 +55,8 @@ export const Fuel = () => {
   }, []);
 
   const handleExport = () => {
-    toast.info('Downloading CSV export...');
+    exportToCSV(logs, 'fuel_export');
+    toast.success('Downloaded CSV export!');
   };
 
   const columns = useMemo<ColumnDef<FuelLog>[]>(() => [
@@ -96,7 +125,7 @@ export const Fuel = () => {
               <FileDown className="w-4 h-4 mr-2" />
               Export Data
             </Button>
-            <Button className="shadow-enterprise" onClick={() => toast.info('Log Fuel dialog opened.')}>
+            <Button className="shadow-enterprise" onClick={() => setIsModalOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Log Fuel
             </Button>
@@ -131,6 +160,31 @@ export const Fuel = () => {
           <DataTable columns={columns} data={logs} searchPlaceholder="Search by ID, vehicle..." />
         )}
       </Card>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Log Fuel">
+        <form onSubmit={handleLogSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Vehicle ID</label>
+            <Input name="vehicleId" type="text" required  />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Date</label>
+            <Input name="date" type="date" required  />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Volume</label>
+            <Input name="gallons" type="number" required step="0.01" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Total Cost ($)</label>
+            <Input name="cost" type="number" required step="0.01" />
+          </div>
+          <div className="pt-4 flex justify-end gap-3 border-t border-odoo-border">
+            <Button variant="outline" type="button" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Record'}</Button>
+          </div>
+        </form>
+      </Modal>
     </motion.div>
   );
 };

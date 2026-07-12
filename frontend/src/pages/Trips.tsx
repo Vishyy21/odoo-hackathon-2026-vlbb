@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TripService } from '../services/trip.service';
 import type { Trip } from '../types';
 import { toast } from 'sonner';
+import { exportToCSV } from '../utils/csv';
 import { DataTable } from '../components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
@@ -29,7 +30,8 @@ export const Trips = () => {
   }, []);
 
   const handleExport = () => {
-    toast.info('Downloading CSV export...');
+    exportToCSV(trips, 'trips_export');
+    toast.success('Downloaded CSV export!');
   };
 
   const columns = useMemo<ColumnDef<Trip>[]>(() => [

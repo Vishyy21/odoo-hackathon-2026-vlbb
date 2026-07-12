@@ -8,13 +8,43 @@ import { motion } from 'framer-motion';
 import { MaintenanceService } from '../services/maintenance.service';
 import type { MaintenanceRecord } from '../mocks/maintenance.mock';
 import { toast } from 'sonner';
+import { exportToCSV } from '../utils/csv';
 import { DataTable } from '../components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
 
+import { Modal } from '../components/ui/modal';
+import { Input } from '../components/ui/input';
+
 export const Maintenance = () => {
   const [records, setRecords] = useState<MaintenanceRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleLogSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const form = e.target as HTMLFormElement;
+      const data = {
+        vehicleId: (form.elements.namedItem('vehicleId') as HTMLInputElement).value,
+        serviceType: (form.elements.namedItem('serviceType') as HTMLInputElement).value,
+        date: (form.elements.namedItem('date') as HTMLInputElement).value,
+        description: (form.elements.namedItem('description') as HTMLInputElement).value,
+        cost: Number((form.elements.namedItem('cost') as HTMLInputElement).value),
+        status: 'Scheduled',
+      };
+      const result = await MaintenanceService.logMaintenance(data);
+      setRecords([result, ...records]);
+      setIsModalOpen(false);
+      toast.success('Maintenance logged successfully');
+    } catch (err) {
+      toast.error('Failed to log maintenance');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     MaintenanceService.getMaintenanceRecords().then((data) => {
@@ -27,7 +57,8 @@ export const Maintenance = () => {
   }, []);
 
   const handleExport = () => {
-    toast.info('Downloading CSV export...');
+    exportToCSV(records, 'maintenance_log');
+    toast.success('Downloaded CSV export!');
   };
 
   const columns = useMemo<ColumnDef<MaintenanceRecord>[]>(() => [
@@ -109,7 +140,7 @@ export const Maintenance = () => {
               <FileDown className="w-4 h-4 mr-2" />
               Export Log
             </Button>
-            <Button className="shadow-enterprise" onClick={() => toast.info('Log Maintenance dialog opened.')}>
+            <Button className="shadow-enterprise" onClick={() => setIsModalOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Log Maintenance
             </Button>
@@ -146,6 +177,35 @@ export const Maintenance = () => {
           <DataTable columns={columns} data={records} searchPlaceholder="Search by ID, vehicle..." />
         )}
       </Card>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Log Maintenance">
+        <form onSubmit={handleLogSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Vehicle ID</label>
+            <Input name="vehicleId" required placeholder="e.g. TRK-001" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Service Type</label>
+            <Input name="serviceType" required placeholder="e.g. Oil Change, Engine Repair" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Date</label>
+            <Input name="date" type="date" required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Description</label>
+            <Input name="description" required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Estimated Cost ($)</label>
+            <Input name="cost" type="number" step="0.01" required />
+          </div>
+          <div className="pt-4 flex justify-end gap-3 border-t border-odoo-border">
+            <Button variant="outline" type="button" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Record'}</Button>
+          </div>
+        </form>
+      </Modal>
     </motion.div>
   );
 };

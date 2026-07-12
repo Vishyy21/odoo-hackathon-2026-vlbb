@@ -1,3 +1,8 @@
+import { useState } from 'react';
+import { Modal } from '../components/ui/modal';
+import { Input } from '../components/ui/input';
+import { TripService } from '../services/trip.service';
+import { toast } from 'sonner';
 
 import { PageHeader } from '../components/layout/page-header';
 import { StatCard } from '../components/ui/stat-card';
@@ -27,6 +32,31 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export const Dashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleTripSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const form = e.target as HTMLFormElement;
+      const data = {
+        vehicle_id: (form.elements.namedItem('vehicle_id') as HTMLInputElement).value,
+        driver_id: (form.elements.namedItem('driver_id') as HTMLInputElement).value,
+        start_location: (form.elements.namedItem('start_location') as HTMLInputElement).value,
+        end_location: (form.elements.namedItem('end_location') as HTMLInputElement).value,
+        start_date: (form.elements.namedItem('start_date') as HTMLInputElement).value
+      };
+      await TripService.createTrip(data);
+      toast.success('Trip planned successfully! Check Trips tab.');
+      setIsModalOpen(false);
+    } catch (err) {
+      toast.error('Failed to create trip');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const { kpis, recentTrips, alerts, timeline, charts } = mockDashboardData;
 
   const sparklineData = [
@@ -49,7 +79,7 @@ export const Dashboard = () => {
               <FileText className="w-4 h-4 mr-2" />
               Export Report
             </Button>
-            <Button className="shadow-enterprise hover:shadow-enterprise-md transition-shadow">
+            <Button className="shadow-enterprise hover:shadow-enterprise-md transition-shadow" onClick={() => setIsModalOpen(true)}>
               <Map className="w-4 h-4 mr-2" />
               New Trip (Ctrl+K)
             </Button>
@@ -339,6 +369,34 @@ export const Dashboard = () => {
           </div>
         </CardContent>
       </Card>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Plan New Trip">
+        <form onSubmit={handleTripSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Vehicle ID</label>
+            <Input name="vehicle_id" required placeholder="e.g. 1 (Requires valid DB ID)" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Driver ID</label>
+            <Input name="driver_id" required placeholder="e.g. 1 (Requires valid DB ID)" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Start Location</label>
+            <Input name="start_location" required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">End Location</label>
+            <Input name="end_location" required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Start Date</label>
+            <Input name="start_date" type="date" required />
+          </div>
+          <div className="pt-4 flex justify-end gap-3 border-t border-odoo-border">
+            <Button variant="outline" type="button" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Plan Trip'}</Button>
+          </div>
+        </form>
+      </Modal>
     </motion.div>
   );
 };

@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { DriverService } from '../services/driver.service';
 import type { Driver } from '../types';
 import { toast } from 'sonner';
+import { exportToCSV } from '../utils/csv';
 import { DataTable } from '../components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
@@ -27,7 +28,8 @@ export const Drivers = () => {
   }, []);
 
   const handleExport = () => {
-    toast.info('Downloading CSV export...');
+    exportToCSV(drivers, 'drivers_export');
+    toast.success('Downloaded CSV export!');
   };
 
   const handleAddDriver = () => {

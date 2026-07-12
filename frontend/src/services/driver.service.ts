@@ -2,7 +2,7 @@ import { apiClient } from '../api/api';
 import type { Driver } from '../types';
 import { MOCK_DRIVERS } from '../mocks/driver.mock';
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export const DriverService = {
   getDrivers: async (): Promise<Driver[]> => {

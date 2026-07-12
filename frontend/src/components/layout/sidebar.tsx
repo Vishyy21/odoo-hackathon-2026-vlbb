@@ -1,6 +1,8 @@
 
 import { cn } from '../../utils/cn';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { AuthService } from '../../services/auth.service';
+import { toast } from 'sonner';
 import { 
   LayoutDashboard, 
   Truck, 
@@ -29,6 +31,19 @@ const navItems = [
 ];
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await AuthService.logout();
+      localStorage.removeItem('auth_token');
+      navigate('/login');
+      toast.success('Logged out successfully');
+    } catch (err) {
+      toast.error('Failed to log out');
+    }
+  };
+
   return (
     <aside className="w-64 bg-odoo-surface border-r border-odoo-border flex flex-col h-screen sticky top-0 left-0 z-20 transition-colors duration-300">
       <div className="h-16 flex items-center px-6 border-b border-odoo-border">
@@ -64,7 +79,7 @@ export const Sidebar = () => {
       </div>
 
       <div className="p-4 border-t border-odoo-border">
-        <button className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-odoo-danger hover:bg-odoo-danger/10 rounded-md transition-colors">
+        <button onClick={handleLogout} className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-odoo-danger hover:bg-odoo-danger/10 rounded-md transition-colors">
           <LogOut className="h-5 w-5" />
           <span>Logout</span>
         </button>

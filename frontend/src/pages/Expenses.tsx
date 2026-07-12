@@ -9,6 +9,9 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { ExpenseService } from '../services/expense.service';
 import type { Expense } from '../mocks/expense.mock';
 import { toast } from 'sonner';
+import { Modal } from '../components/ui/modal';
+import { Input } from '../components/ui/input';
+import { exportToCSV } from '../utils/csv';
 import { DataTable } from '../components/ui/data-table';
 import type { ColumnDef } from '@tanstack/react-table';
 
@@ -23,6 +26,31 @@ const expenseData = [
 export const Expenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleLogSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const form = e.target as HTMLFormElement;
+      const data = {
+        category: (form.elements.namedItem('category') as HTMLInputElement).value,
+        date: (form.elements.namedItem('date') as HTMLInputElement).value,
+        description: (form.elements.namedItem('description') as HTMLInputElement).value,
+        amount: Number((form.elements.namedItem('amount') as HTMLInputElement).value),
+      };
+      const result = await ExpenseService.logExpense(data);
+      setExpenses([result, ...expenses]);
+      toast.success('Expense logged successfully');
+      setIsModalOpen(false);
+    } catch (err) {
+      toast.error('Failed to log expense');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   useEffect(() => {
     ExpenseService.getExpenses().then((data) => {
@@ -35,7 +63,8 @@ export const Expenses = () => {
   }, []);
 
   const handleExport = () => {
-    toast.info('Downloading CSV export...');
+    exportToCSV(expenses, 'expenses_export');
+    toast.success('Downloaded CSV export!');
   };
 
   const columns = useMemo<ColumnDef<Expense>[]>(() => [
@@ -101,7 +130,7 @@ export const Expenses = () => {
               <FileDown className="w-4 h-4 mr-2" />
               Export
             </Button>
-            <Button className="shadow-enterprise" onClick={() => toast.info('New Expense dialog opened.')}>
+            <Button className="shadow-enterprise" onClick={() => setIsModalOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
               New Expense
             </Button>
@@ -162,6 +191,31 @@ export const Expenses = () => {
           )}
         </Card>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Log Expense">
+        <form onSubmit={handleLogSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Category</label>
+            <Input name="category" type="text" required  />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Date</label>
+            <Input name="date" type="date" required  />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Description</label>
+            <Input name="description" type="text" required  />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-odoo-text mb-1">Amount ($)</label>
+            <Input name="amount" type="number" required step="0.01" />
+          </div>
+          <div className="pt-4 flex justify-end gap-3 border-t border-odoo-border">
+            <Button variant="outline" type="button" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Record'}</Button>
+          </div>
+        </form>
+      </Modal>
     </motion.div>
   );
 };

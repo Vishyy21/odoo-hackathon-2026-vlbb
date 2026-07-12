@@ -3,7 +3,7 @@ import type { Vehicle } from '../types';
 import { MOCK_VEHICLES } from '../mocks/vehicle.mock';
 
 // USE_MOCK determines if we use local mock data or the Axios API client
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export const VehicleService = {
   getVehicles: async (): Promise<Vehicle[]> => {
