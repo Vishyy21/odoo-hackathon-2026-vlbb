@@ -1,32 +1,177 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+# 🎨 TransitOps Frontend
 
-Currently, two official plugins are available:
+### Modern Fleet Management Dashboard
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Built with **React + TypeScript + Vite**
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite)
+![Status](https://img.shields.io/badge/Status-Development-orange)
 
-## Expanding the Oxlint configuration
+</div>
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+---
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# 🚀 Overview
+
+The **TransitOps Frontend** is a responsive web interface developed for the **Odoo Hackathon 2026**. It provides an intuitive dashboard for managing fleet operations, monitoring trips, and visualizing logistics data.
+
+The application focuses on delivering a clean, user-friendly experience with fast performance and modern UI components.
+
+---
+
+# ✨ Features
+
+- 🚛 Fleet Dashboard
+- 👨‍✈️ Driver Management
+- 🛣️ Trip Monitoring
+- 🔧 Maintenance Tracking
+- ⛽ Fuel Logs
+- 💰 Expense Analytics
+- 📊 Charts & Statistics
+- 📱 Responsive Design
+- 🌙 Modern UI
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| React | UI Library |
+| TypeScript | Type Safety |
+| Vite | Build Tool |
+| CSS / Tailwind *(if used)* | Styling |
+
+---
+
+# 📂 Folder Structure
+
+```text
+frontend/
+
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── pages/
+│   ├── hooks/
+│   ├── services/
+│   ├── utils/
+│   ├── App.tsx
+│   └── main.tsx
+│
+├── package.json
+├── vite.config.ts
+└── README.md
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+# ⚙️ Installation
+
+Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+Navigate to the frontend
+
+```bash
+cd frontend
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run the development server
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# 🏗️ Build
+
+```bash
+npm run build
+```
+
+Preview production build
+
+```bash
+npm run preview
+```
+
+---
+
+# 📸 UI Preview
+
+> Dashboard screenshots and demo video will be added here after implementation.
+
+---
+
+# 🎯 Design Goals
+
+- Minimalistic Interface
+- Smooth User Experience
+- Fast Loading
+- Mobile Responsive
+- Dashboard Focused
+- Clean Navigation
+
+---
+
+# 📈 Planned Pages
+
+- 🏠 Dashboard
+- 🚚 Vehicles
+- 👨‍✈️ Drivers
+- 🛣️ Trips
+- 🔧 Maintenance
+- ⛽ Fuel Logs
+- 💰 Expenses
+- ⚙️ Settings
+
+---
+
+# 🔗 Integration
+
+The frontend communicates with the backend APIs to:
+
+- Fetch dashboard statistics
+- Manage fleet records
+- Track trips
+- Display analytics
+- Handle CRUD operations
+
+---
+
+# 👨‍💻 Developed By
+
+**Frontend Team**  
+Odoo Hackathon 2026
+
+---
+
+<div align="center">
+
+### 🚀 Built with React + TypeScript + Vite
+
+</div>
